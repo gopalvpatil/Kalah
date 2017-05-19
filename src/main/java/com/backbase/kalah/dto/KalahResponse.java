@@ -2,7 +2,7 @@ package com.backbase.kalah.dto;
 
 /**
 * <h1>KalahResponse!</h1>
-* This class is responsible to set KalahServiceImpl board response
+* This class is responsible to set Kalah board response
 *
 * @author Gopal Patil
 * @version 1.0

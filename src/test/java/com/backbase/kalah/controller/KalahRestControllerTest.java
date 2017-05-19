@@ -4,13 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import javax.annotation.Resource;
-
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.support.membermodification.MemberModifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -37,14 +37,16 @@ import com.google.gson.Gson;
 */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value= "/servlet-context.xml")
-@Resource()
 @WebAppConfiguration
 @RestController
 public class KalahRestControllerTest {
+	
+    private static final Logger LOGGER = LoggerFactory.getLogger(KalahRestControllerTest.class);
 
 	private MockMvc mockMvc;
 	
 	KalahRestController kalahRestController;
+	
 	@Autowired
 	KalahService kalahService;
 
@@ -62,26 +64,28 @@ public class KalahRestControllerTest {
 	
 	@Test
 	public void testInitGame() throws Exception {
+		LOGGER.debug("KalahRestControllerTest:: testInitGame(): Test Initialise kalah Game");
 		KalahResponse kalahResponse = new KalahResponse();
 		kalahResponse.setCurrentPlayerId(1);
 		kalahResponse.setError(false);
 	
 		kalahRestController = EasyMock.createMock(KalahRestController.class);
-		EasyMock.expect(kalahRestController.initGame()).andReturn(kalahResponse).times(3);		
+		EasyMock.expect(kalahRestController.initGame(6)).andReturn(kalahResponse).times(3);		
 		EasyMock.replay(kalahRestController);
 		
-		assertNotNull(kalahRestController.initGame().getCurrentPlayerId());
-		assertEquals(1, kalahRestController.initGame().getCurrentPlayerId());
+		assertNotNull(kalahRestController.initGame(6).getCurrentPlayerId());
+		assertEquals(1, kalahRestController.initGame(6).getCurrentPlayerId());
 	}
 	
 	@Test
     public void testInitGameApi() throws Exception {
+		LOGGER.debug("KalahRestControllerTest:: testInitGameApi(): Test Initialise kalah Game API");
         KalahPlayer kalahPlayer = new KalahPlayer();
         kalahPlayer.setId(1);
         String json = new Gson().toJson(kalahPlayer);
 
         mockMvc.perform(
-                post("/kalah/api/initGame")
+                post("/kalah/api/initGame/6")
                         .content(json)).andReturn();
     }
 	

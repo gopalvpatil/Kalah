@@ -2,7 +2,7 @@ package com.backbase.kalah.dto;
 
 /**
 * <h1>KalahPlayer!</h1>
-* This class is responsible to set KalahServiceImpl Players
+* This pojo class is set Kalah Player
 *
 * @author Gopal Patil
 * @version 1.0

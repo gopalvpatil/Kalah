@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,13 +36,14 @@ public class KalahRestController {
     
     /**
     * This service is called to initiate the game.
+    * @param stonesPerPit : sets stones per pit
     * @return KalahResponse : Returns the game's board and current player id.
     * @exception IOException On input error.
     * @see IOException
     */
-    @RequestMapping(value = "/initGame", method = RequestMethod.GET)
+    @RequestMapping(value = "/initGame/{stonesPerPit}", method = RequestMethod.GET)
     @ResponseBody
-    public KalahResponse initGame() {
+    public KalahResponse initGame(@PathVariable int stonesPerPit) {
     	LOGGER.debug("KalahRestController:: initGame(): Initialise kalah Game");
     	KalahResponse kalahResponse = new KalahResponse();
     	try {
