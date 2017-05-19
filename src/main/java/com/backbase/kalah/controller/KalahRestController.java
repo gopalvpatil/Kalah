@@ -47,10 +47,9 @@ public class KalahRestController {
     	LOGGER.debug("KalahRestController:: initGame(): Initialise kalah Game");
     	KalahResponse kalahResponse = new KalahResponse();
     	try {
-    		kalahResponse = kalahService.init();
+    		kalahResponse = kalahService.init(stonesPerPit);
     	} catch(KalahException e) {
     		LOGGER.error("Error occurred while initialising game. Please try again" , e);
-            kalahResponse.setCurrentPlayerId(1);
             kalahResponse.setError(true);
             kalahResponse.setErrorMessage("Error occurred while initialising game. Please try again");
     	}

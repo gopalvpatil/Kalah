@@ -14,6 +14,6 @@ import com.backbase.kalah.exception.KalahException;
 */
 public interface KalahService {
 
-	public KalahResponse init() throws KalahException ;
+	public KalahResponse init(int stonesPerPit) throws KalahException ;
 	
 }

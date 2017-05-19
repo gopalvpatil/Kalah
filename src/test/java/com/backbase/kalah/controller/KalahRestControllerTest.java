@@ -3,6 +3,7 @@ package com.backbase.kalah.controller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.easymock.EasyMock;
 import org.junit.Before;
@@ -66,15 +67,18 @@ public class KalahRestControllerTest {
 	public void testInitGame() throws Exception {
 		LOGGER.debug("KalahRestControllerTest:: testInitGame(): Test Initialise kalah Game");
 		KalahResponse kalahResponse = new KalahResponse();
-		kalahResponse.setCurrentPlayerId(1);
+		KalahPlayer kalahPlayer = new KalahPlayer();
+		kalahPlayer.setId(1);
+		
+		kalahResponse.setKalahPlayer(kalahPlayer);
 		kalahResponse.setError(false);
 	
 		kalahRestController = EasyMock.createMock(KalahRestController.class);
 		EasyMock.expect(kalahRestController.initGame(6)).andReturn(kalahResponse).times(3);		
 		EasyMock.replay(kalahRestController);
 		
-		assertNotNull(kalahRestController.initGame(6).getCurrentPlayerId());
-		assertEquals(1, kalahRestController.initGame(6).getCurrentPlayerId());
+		assertNotNull(kalahRestController.initGame(6).getKalahPlayer().getId());
+		assertEquals(1, kalahRestController.initGame(6).getKalahPlayer().getId());
 	}
 	
 	@Test
@@ -85,8 +89,9 @@ public class KalahRestControllerTest {
         String json = new Gson().toJson(kalahPlayer);
 
         mockMvc.perform(
-                post("/kalah/api/initGame/6")
-                        .content(json)).andReturn();
+                post("/kalah/api/initGame/6").content(json))
+        		.andExpect(status().isOk())
+                .andReturn();
     }
 	
 }
