@@ -4,8 +4,10 @@ import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.backbase.kalah.configuration.KalahGameRules;
 import com.backbase.kalah.dto.KalahBoard;
 import com.backbase.kalah.dto.KalahPlayer;
 import com.backbase.kalah.dto.KalahResponse;
@@ -29,6 +31,9 @@ public class KalahServiceImpl implements KalahService {
     
     private KalahPlayer kalahPlayer;
     private KalahBoard kalahBoard;
+    
+    @Autowired
+    KalahGameRules kalahGameRules;
 
     /**
     * This method is called to initiate the game.
@@ -52,6 +57,46 @@ public class KalahServiceImpl implements KalahService {
 		kalahPlayer.setId(1);
     	
         return this.setKalahResponse(kalahPlayer, kalahBoard, false, "");
+    }
+    
+    /**
+    * This method is called to validate player's move.
+    * @param pits, currentStoneIndex, currentPlayerId
+    * @return KalahResponse : Returns the game's board with current player id.
+    * @exception KalahException On input error.
+    * @see KalahException
+    */
+    @Override
+    public KalahResponse validateMove(KalahPlayer kalahPlayer, KalahBoard kalahBoard, int currentStoneIndex, int currentPlayerId) throws KalahException {
+    	LOGGER.debug("KalahServiceImpl:: validateMove(): validate Move");
+    	String errorMessage = "";
+    	boolean isError = false;
+    	
+    	int pits[] = kalahBoard.getPits();
+
+		if(currentStoneIndex < 0 || currentStoneIndex > pits.length) {
+			errorMessage = " IllegalMoveError!!, Index does not exist.";
+			isError = true;
+		} else if(currentStoneIndex == KalahConstants.HOUSE_INDEX_PLAYER1 || currentStoneIndex == KalahConstants.HOUSE_INDEX_PLAYER2) {
+			errorMessage = " IllegalMoveError!!, KalahPlayer must not sow seeds from the store";
+			isError = true;
+		}
+		else if((currentPlayerId == 1 && currentStoneIndex > KalahConstants.HOUSE_INDEX_PLAYER1) ||
+				(currentPlayerId == 2 && currentStoneIndex < KalahConstants.HOUSE_INDEX_PLAYER1)) {
+			errorMessage = " IllegalMoveError!!, Current player must not sow from the opponent's pits";
+			isError = true;
+		}
+		else if(pits[currentStoneIndex] == 0) {
+			errorMessage = " IllegalMoveError!!, Pit is empty.";
+			isError = true;
+		} else if(kalahGameRules.isGameOver(pits)) {
+			errorMessage = " IllegalMoveError!!, Game is over";
+			isError = true;
+		} else {
+			errorMessage = "";
+			isError = false;
+		}
+        return this.setKalahResponse(kalahPlayer, kalahBoard, isError, errorMessage);
     }
     
     /**

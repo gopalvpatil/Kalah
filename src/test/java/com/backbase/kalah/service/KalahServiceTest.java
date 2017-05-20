@@ -60,4 +60,10 @@ public class KalahServiceTest extends TestCase {
 		assertEquals(Arrays.toString(kalahBoard.getPits()), Arrays.toString(kalahResponse.getKalahBoard().getPits()));
 	}
 	
+	@Test
+	public void testValidateMove() throws IOException {
+		LOGGER.debug("KalahServiceTest :: testValidateMove");
+		assertTrue(kalahService.validateMove(kalahPlayer, kalahBoard, 12, 1).isError());
+	}
+	
 }

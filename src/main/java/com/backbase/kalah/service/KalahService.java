@@ -1,5 +1,7 @@
 package com.backbase.kalah.service;
 
+import com.backbase.kalah.dto.KalahBoard;
+import com.backbase.kalah.dto.KalahPlayer;
 import com.backbase.kalah.dto.KalahResponse;
 import com.backbase.kalah.exception.KalahException;
 
@@ -15,5 +17,8 @@ import com.backbase.kalah.exception.KalahException;
 public interface KalahService {
 
 	public KalahResponse init(int stonesPerPit) throws KalahException ;
+
+	public KalahResponse validateMove(KalahPlayer kalahPlayer, KalahBoard kalahBoard, int currentStoneIndex,
+			int currentPlayerId) throws KalahException;
 	
 }
