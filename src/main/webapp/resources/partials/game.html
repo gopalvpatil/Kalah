@@ -1,0 +1,46 @@
+<div class="container">
+	<div class="panel panel-default" style="border-color: #a03232;">
+		<div class="panel-body">A Basic Panel
+			<div style="margin-top: 16px">
+				<div ng-show="errMsg != ''" class="alert alert-danger">
+					<strong>{{errMsg}}</strong>
+				</div>
+				<div class="alert alert-info">
+					<strong>{{msg}}</strong>
+				</div>	
+			</div>		
+			<div>
+				<h1 class="player2">Player 2 Score: {{player2Points}}</h1>
+			</div>
+			<div>
+				<div class="divpanel" >
+					<section class="rowPlayer2">
+						<ul id="playerPlayer2" class="player-row-container">
+							<li><div class="circle circle-home">{{board[13]}}</div></li>
+							<li><div class="circle" ng-click='sow(12)'>{{board[12]}}</div>
+							<li><div class="circle" ng-click='sow(11)'>{{board[11]}}</div>
+							<li><div class="circle" ng-click='sow(10)'>{{board[10]}}</div>
+							<li><div class="circle" ng-click='sow(9)'>{{board[9]}}</div>
+							<li><div class="circle" ng-click='sow(8)'>{{board[8]}}</div>
+							<li><div class="circle" ng-click='sow(7)'>{{board[7]}}</div>
+						</ul>
+					</section>
+					<section class="rowPlayer1">
+						<ul id="playerPlayer1" class="player-row-container">
+							<li><div class="circle" ng-click="sow(0)">{{board[0]}}</div>
+							<li><div class="circle" ng-click='sow(1)'>{{board[1]}}</div>
+							<li><div class="circle" ng-click='sow(2)'>{{board[2]}}</div>
+							<li><div class="circle" ng-click='sow(3)'>{{board[3]}}</div>
+							<li><div class="circle" ng-click='sow(4)'>{{board[4]}}</div>
+							<li><div class="circle" ng-click='sow(5)'>{{board[5]}}</div>
+							<li><div class="circle circle-home">{{board[6]}}</div>
+						</ul>
+					</section>
+				</div>
+			</div>
+			<div>
+				<h1 class="player1">Player 1 Score: {{player1Points}} </h1>
+			</div>
+		</div>
+	</div>
+</div>
