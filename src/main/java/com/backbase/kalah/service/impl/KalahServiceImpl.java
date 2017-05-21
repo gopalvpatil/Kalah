@@ -208,6 +208,10 @@ public class KalahServiceImpl implements KalahService {
 		
 		pits[KalahConstants.HOUSE_INDEX_PLAYER1] += player1HouseSum;
 		pits[KalahConstants.HOUSE_INDEX_PLAYER2] += player2HouseSum;
+		
+		Arrays.fill(pits, 0, KalahConstants.HOUSE_INDEX_PLAYER1, 0);
+		Arrays.fill(pits, 7, KalahConstants.HOUSE_INDEX_PLAYER2, 0);
+		
 		LOGGER.info("GAME OVER!!");
 		
 		return pits;
