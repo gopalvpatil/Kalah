@@ -21,8 +21,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.backbase.kalah.dto.KalahGame;
 import com.backbase.kalah.dto.KalahPlayer;
-import com.backbase.kalah.dto.KalahResponse;
 import com.backbase.kalah.service.KalahService;
 import com.backbase.kalah.service.impl.KalahServiceImpl;
 import com.google.gson.Gson;
@@ -66,15 +66,15 @@ public class KalahRestControllerTest {
 	@Test
 	public void testInitGame() throws Exception {
 		LOGGER.debug("KalahRestControllerTest:: testInitGame(): Test Initialise kalah Game");
-		KalahResponse kalahResponse = new KalahResponse();
+		KalahGame kalahGameResponse = new KalahGame();
 		KalahPlayer kalahPlayer = new KalahPlayer();
 		kalahPlayer.setId(1);
 		
-		kalahResponse.setKalahPlayer(kalahPlayer);
-		kalahResponse.setError(false);
+		kalahGameResponse.setKalahPlayer(kalahPlayer);
+		kalahGameResponse.setError(false);
 	
 		kalahRestController = EasyMock.createMock(KalahRestController.class);
-		EasyMock.expect(kalahRestController.initGame(6)).andReturn(kalahResponse).times(3);		
+		EasyMock.expect(kalahRestController.initGame(6)).andReturn(kalahGameResponse).times(3);		
 		EasyMock.replay(kalahRestController);
 		
 		assertNotNull(kalahRestController.initGame(6).getKalahPlayer().getId());
@@ -90,6 +90,46 @@ public class KalahRestControllerTest {
 
         mockMvc.perform(
                 post("/kalah/api/initGame/6").content(json))
+        		.andExpect(status().isOk())
+                .andReturn();
+    }
+	
+	@Test
+	public void testMoveStones() throws Exception {
+		LOGGER.debug("KalahRestControllerTest:: testMoveStones(): Test Move Stones");
+
+        KalahPlayer kalahPlayer = new KalahPlayer();
+        kalahPlayer.setId(1);
+        
+		KalahGame kalahGameResponse = new KalahGame();
+		kalahGameResponse.setKalahPlayer(kalahPlayer);
+		kalahGameResponse.setError(false);
+        
+        KalahGame kalahGameRequest = new KalahGame();
+        kalahGameRequest.setSelectedPitsIndex(0);
+        kalahGameRequest.setKalahPlayer(kalahPlayer);
+	
+		kalahRestController = EasyMock.createMock(KalahRestController.class);
+		EasyMock.expect(kalahRestController.moveStones(kalahGameRequest)).andReturn(kalahGameResponse).times(3);		
+		EasyMock.replay(kalahRestController);
+		
+		assertNotNull(kalahRestController.moveStones(kalahGameRequest).getKalahPlayer().getId());
+		assertEquals(1, kalahRestController.moveStones(kalahGameRequest).getKalahPlayer().getId());
+	}
+	
+	@Test
+    public void testMoveStonesApi() throws Exception {
+		LOGGER.debug("KalahRestControllerTest:: testMoveStonesApi(): Test move stones API");
+        KalahPlayer kalahPlayer = new KalahPlayer();
+        kalahPlayer.setId(1);
+        
+        KalahGame kalahGameRequest = new KalahGame();
+        kalahGameRequest.setSelectedPitsIndex(0);
+        kalahGameRequest.setKalahPlayer(kalahPlayer);
+        String json = new Gson().toJson(kalahGameRequest);
+
+        mockMvc.perform(
+                post("/kalah/api/moveStones").content(json))
         		.andExpect(status().isOk())
                 .andReturn();
     }

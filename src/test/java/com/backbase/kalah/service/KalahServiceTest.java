@@ -14,8 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.backbase.kalah.dto.KalahBoard;
+import com.backbase.kalah.dto.KalahGame;
 import com.backbase.kalah.dto.KalahPlayer;
-import com.backbase.kalah.dto.KalahResponse;
 
 import junit.framework.TestCase;
 
@@ -40,6 +40,8 @@ public class KalahServiceTest extends TestCase {
 	
     private KalahPlayer kalahPlayer;
     private KalahBoard kalahBoard;
+    
+	int[] expectedPits = {2, 2, 3, 3, 2, 1, 29, 3, 2, 2, 2, 2, 1, 17};
 	
 	@Before
 	public void setUp() throws Exception {
@@ -55,7 +57,7 @@ public class KalahServiceTest extends TestCase {
 	@Test
 	public void testInit() throws IOException {
 		LOGGER.debug("KalahServiceTest :: testInit");
-		KalahResponse kalahResponse = kalahService.init(6);
+		KalahGame kalahResponse = kalahService.init(6);
 		assertEquals(kalahPlayer.getId(), kalahResponse.getKalahPlayer().getId());
 		assertEquals(Arrays.toString(kalahBoard.getPits()), Arrays.toString(kalahResponse.getKalahBoard().getPits()));
 	}
@@ -63,7 +65,33 @@ public class KalahServiceTest extends TestCase {
 	@Test
 	public void testValidateMove() throws IOException {
 		LOGGER.debug("KalahServiceTest :: testValidateMove");
-		assertTrue(kalahService.validateMove(kalahPlayer, kalahBoard, 12, 1).isError());
+		KalahGame kalahGameRequest = new KalahGame();
+		kalahGameRequest.setSelectedPitsIndex(12);
+		kalahGameRequest.setKalahBoard(kalahBoard);
+		kalahGameRequest.setKalahPlayer(kalahPlayer);
+		assertTrue(kalahService.validateMove(kalahGameRequest).isError());
+	}
+	
+	@Test
+	public void testMoveStones() throws IOException {
+		LOGGER.debug("KalahServiceTest :: moveStones");
+		int[] currentPits = {0, 0, 1, 1, 1, 0, 29, 2, 1, 1, 1, 1, 18, 15};
+		
+		kalahBoard.setPits(currentPits);
+		kalahPlayer.setId(2);
+		
+		KalahGame kalahGameRequest = new KalahGame();
+		kalahGameRequest.setSelectedPitsIndex(12);
+		kalahGameRequest.setKalahBoard(kalahBoard);
+		kalahGameRequest.setKalahPlayer(kalahPlayer);
+		
+		LOGGER.debug("Current Game KalahBoard: " + Arrays.toString(currentPits));
+		KalahGame kalahGameResponse = kalahService.moveStones(kalahGameRequest);
+		
+		String pitsStr =  Arrays.toString(kalahGameResponse.getKalahBoard().getPits());
+		
+		assertEquals(Arrays.toString(expectedPits), pitsStr);
+		LOGGER.debug("Changed Game KalahBoard: " + pitsStr);
 	}
 	
 }
