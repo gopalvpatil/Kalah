@@ -64,7 +64,13 @@ kalah.controller('GameController', function ($scope, $http, $window, kalahServic
                         $scope.msg = "Player2 turn!!";
                     }
                     else {
-                        $scope.msg = "GAME OVER!!";
+                    	if($scope.board[13] > $scope.board[6]) {
+                    		$scope.msg = "GAME OVER!! - Player 2 Won";
+                    	} else if ($scope.board[13] < $scope.board[6]){
+                    		$scope.msg = "GAME OVER!! - Player 1 Won";
+                    	} else {
+                    		$scope.msg = "GAME OVER!! - Both players have equal scores";
+                    	}
                     }
                     $scope.player2Points = $scope.board[13];
                     $scope.player1Points = $scope.board[6];
